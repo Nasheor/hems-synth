@@ -1,0 +1,258 @@
+{
+  "research_date": "2026-10-28",
+  "currency": "EUR",
+  "unit": "cent per kWh including VAT unless a plan says otherwise",
+  "vat": {
+    "pct": 9,
+    "sources": [
+      "https://prd-cdn.electricireland.ie/media/docs/default-source/price-plans/residential/2026/0726_pp_he_saver_16.pdf (34.18 ex VAT is 37.26 inc VAT)",
+      "https://www.sseairtricity.com/assets/Tariffs/ROI/Current/1YR-ELEC-25.pdf (ex VAT and inc VAT columns)",
+      "https://www.energia.ie/about-energia/our-tariffs (inc VAT and ex VAT pairs)"
+    ]
+  },
+  "pso_levy": {
+    "eur_month_ex_vat": 0.51,
+    "eur_month_inc_vat": 0.56,
+    "period": "2026-10-01 to 2027-09-30",
+    "sources": [
+      "https://www.cru.ie/about-us/news/cru-approves-202627-electricity-network-charges-and-reduced-pso-levy/",
+      "https://www.sseairtricity.com/assets/Tariffs/ROI/Current/1YR-ELEC-25.pdf",
+      "https://www.bordgaisenergy.ie/home/our-tariffs (annual PSO levy of 6.67 euro including VAT)"
+    ]
+  },
+  "default_export_cent": 18.5,
+  "default_export_note": "Used only for a plan whose own page did not state an export rate. 18.5 cent is the figure printed by Energia, Bord Gais Energy and Pinergy on the pages above.",
+  "band_model": "Local clock hours 0 to 24. A window whose start is greater than its end wraps past midnight. Band priority: ev, then peak, then night, then day. Day is the default band. Weekday-only peaks are modelled every day, see notes.",
+  "plans": [
+    {
+      "key": "ei_sst",
+      "supplier": "Electric Ireland",
+      "name": "Home Electric+ Standard Smart Tariff, Saver 16 %",
+      "day": 34.05,
+      "night": 17.89,
+      "peak": 36.33,
+      "ev": null,
+      "windows": {"night": [[23, 8]], "peak": [[17, 19]], "ev": []},
+      "standing_eur_year": 250.77,
+      "export_cent": null,
+      "discount_included_pct": 16,
+      "vat_included": true,
+      "effective_from": "2026-10-14",
+      "research_date": "2026-10-28",
+      "source_url": [
+        "https://www.electricireland.ie/switch/new-customer/price-plans?pricePlan=E&meterType=Smart",
+        "https://www.electricireland.ie/residential/products/smart-meters/24hour",
+        "https://prd-cdn.electricireland.ie/media/docs/default-source/price-plans/residential/2026/0726_pp_he_saver_16.pdf"
+      ],
+      "notes": "Unit rates are the effective rates after the 16 % saver discount, including VAT: the plan listing quotes 31.30 for the Saver 16 flat plan, which the July 2026 price schedule PDF prints as the inc VAT effective rate. Standing charge is the urban smart meter figure from the 24 hour plan page, which applies to every Home Electric+ smart plan. No export rate was printed on the pages read."
+    },
+    {
+      "key": "ei_night_boost",
+      "supplier": "Electric Ireland",
+      "name": "Home Electric+ Night Boost",
+      "day": 37.60,
+      "night": 18.54,
+      "peak": null,
+      "ev": 10.88,
+      "windows": {"night": [[23, 8]], "peak": [], "ev": [[2, 4]]},
+      "standing_eur_year": 250.77,
+      "export_cent": null,
+      "discount_included_pct": 5.5,
+      "vat_included": true,
+      "effective_from": "2026-10-14",
+      "research_date": "2026-10-28",
+      "source_url": [
+        "https://www.electricireland.ie/residential/electricity-and-gas/EV-smart-night-boost",
+        "https://www.electricireland.ie/residential/products/smart-meters/24hour"
+      ],
+      "notes": "The plan page prints the rates including VAT and a 5.5 % discount. The 02:00 to 04:00 boost window is held in the ev band."
+    },
+    {
+      "key": "ei_smart_24h",
+      "supplier": "Electric Ireland",
+      "name": "Home Electric+ 24 hour smart",
+      "day": 37.26,
+      "night": null,
+      "peak": null,
+      "ev": null,
+      "windows": {"night": [], "peak": [], "ev": []},
+      "standing_eur_year": 250.77,
+      "export_cent": null,
+      "discount_included_pct": 0,
+      "vat_included": true,
+      "effective_from": "2026-10-14",
+      "research_date": "2026-10-28",
+      "source_url": [
+        "https://www.electricireland.ie/residential/products/smart-meters/24hour"
+      ],
+      "notes": "Standard price including VAT, no discount, as of 14 October 2026."
+    },
+    {
+      "key": "energia_smart_standard",
+      "supplier": "Energia",
+      "name": "Electricity Standard Smart Tariff (MCC16)",
+      "day": 43.39,
+      "night": 31.61,
+      "peak": 49.67,
+      "ev": null,
+      "windows": {"night": [[23, 8]], "peak": [[17, 19]], "ev": []},
+      "standing_eur_year": 278.27,
+      "export_cent": 18.5,
+      "discount_included_pct": 0,
+      "vat_included": true,
+      "effective_from": "2026-10-12",
+      "research_date": "2026-10-28",
+      "source_url": [
+        "https://www.energia.ie/about-energia/our-tariffs",
+        "https://www.energia.ie/about-energia/latest-news/smart-meter-tariffs-guide"
+      ],
+      "notes": "Standard rates before discount. Urban standing charge. Night 23:00 to 08:00 and peak 17:00 to 19:00 from the Energia smart meter guide."
+    },
+    {
+      "key": "energia_smart_data",
+      "supplier": "Energia",
+      "name": "Electricity SMART Data (MCC12)",
+      "day": 43.39,
+      "night": 29.65,
+      "peak": 49.67,
+      "ev": null,
+      "windows": {"night": [[23, 8]], "peak": [[17, 19]], "ev": []},
+      "standing_eur_year": 278.27,
+      "export_cent": 18.5,
+      "discount_included_pct": 0,
+      "vat_included": true,
+      "effective_from": "2026-10-12",
+      "research_date": "2026-10-28",
+      "source_url": [
+        "https://www.energia.ie/about-energia/our-tariffs",
+        "https://www.energia.ie/about-energia/latest-news/smart-meter-tariffs-guide"
+      ],
+      "notes": "Standard rates before discount. Urban standing charge."
+    },
+    {
+      "key": "energia_ev_smart_drive",
+      "supplier": "Energia",
+      "name": "EV Smart Drive (tariff sheet name SMART EV Duo)",
+      "day": 44.62,
+      "night": null,
+      "peak": null,
+      "ev": 13.61,
+      "windows": {"night": [], "peak": [], "ev": [[2, 6]]},
+      "standing_eur_year": 339.22,
+      "export_cent": 18.5,
+      "discount_included_pct": 0,
+      "vat_included": true,
+      "effective_from": "2026-10-12",
+      "research_date": "2026-10-28",
+      "source_url": [
+        "https://www.energia.ie/about-energia/our-tariffs",
+        "https://www.energia.ie/about-energia/latest-news/smart-meter-tariffs-guide",
+        "https://www.energia.ie/Price-Plans/Electricity"
+      ],
+      "notes": "Two bands: the charge time rate from 02:00 to 06:00 (window from the Energia smart meter guide) and the day rate at every other time. Standard rates before the 10 % discount shown on the plan page."
+    },
+    {
+      "key": "sse_smart_standard",
+      "supplier": "SSE Airtricity",
+      "name": "Smart Meter standard (1 Year Home Electricity sheet)",
+      "day": 48.31,
+      "night": 29.36,
+      "peak": 54.11,
+      "ev": null,
+      "windows": {"night": [[23, 8]], "peak": [[17, 19]], "ev": []},
+      "standing_eur_year": 279.99,
+      "export_cent": 19.5,
+      "discount_included_pct": 0,
+      "vat_included": true,
+      "effective_from": "2026-10-05",
+      "research_date": "2026-10-28",
+      "source_url": [
+        "https://www.sseairtricity.com/assets/Tariffs/ROI/Current/1YR-ELEC-25.pdf"
+      ],
+      "notes": "SSE Airtricity standard column before discount. Urban smart standing charge. Timetable printed on the sheet: day 8am to 11pm excluding 5pm to 7pm, night 11pm to 8am, peak 5pm to 7pm."
+    },
+    {
+      "key": "sse_smart_ev_charge",
+      "supplier": "SSE Airtricity",
+      "name": "Smart EV Charge",
+      "day": 54.51,
+      "night": 28.94,
+      "peak": 64.93,
+      "ev": 11.18,
+      "windows": {"night": [[23, 8]], "peak": [[17, 19]], "ev": [[2, 5]]},
+      "standing_eur_year": 355.25,
+      "export_cent": 19.5,
+      "discount_included_pct": 0,
+      "vat_included": true,
+      "effective_from": "2026-10-05",
+      "research_date": "2026-10-28",
+      "source_url": [
+        "https://sseairtricity.com/assets/Tariffs/ROI/Current/1YR-ELEC-15-EVCharge.pdf"
+      ],
+      "notes": "Standard column before discount. The 3hr rate applies 2am to 5am. Urban Smart EV Charge standing charge."
+    },
+    {
+      "key": "bge_smart_standard",
+      "supplier": "Bord Gais Energy",
+      "name": "Smart tariff day, night and peak",
+      "day": 48.49,
+      "night": 35.80,
+      "peak": 59.03,
+      "ev": null,
+      "windows": {"night": [[23, 8]], "peak": [[17, 19]], "ev": []},
+      "standing_eur_year": 262.38,
+      "export_cent": 18.5,
+      "discount_included_pct": 0,
+      "vat_included": true,
+      "effective_from": "2026-10-09",
+      "research_date": "2026-10-28",
+      "source_url": [
+        "https://www.bordgaisenergy.ie/home/our-tariffs",
+        "https://www.bordgaisenergy.ie/home/ev-price-plans"
+      ],
+      "notes": "The peak rate applies Monday to Friday on the supplier page. The 48 half-hour band model has no weekday flag, so the peak is modelled on every day, which slightly overstates this plan on weekends. The tariff page prints one annual standing charge with no urban or rural split."
+    },
+    {
+      "key": "pinergy_smart_standard",
+      "supplier": "Pinergy",
+      "name": "Standard Smart Tariff",
+      "day": 45.80,
+      "night": 34.84,
+      "peak": 49.04,
+      "ev": null,
+      "windows": {"night": [[23, 8]], "peak": [[17, 19]], "ev": []},
+      "standing_eur_year": 283.47,
+      "export_cent": 18.5,
+      "discount_included_pct": 0,
+      "vat_included": true,
+      "effective_from": "2026-09-14",
+      "research_date": "2026-10-28",
+      "source_url": [
+        "https://pinergy.ie/customer-information/lifestyle-smart-tariffs/",
+        "https://pinergy.ie/?p=10334"
+      ],
+      "notes": "Standing charge 77.66 cent per day including VAT, printed as 283.47 euro per year. Peak applies every day on this plan. Export rate from the price notice (residential MicroGen payments 18.5 cent)."
+    },
+    {
+      "key": "pinergy_family_time",
+      "supplier": "Pinergy",
+      "name": "Family Time",
+      "day": 45.80,
+      "night": 27.48,
+      "peak": null,
+      "ev": null,
+      "windows": {"night": [[19, 24]], "peak": [], "ev": []},
+      "standing_eur_year": 283.47,
+      "export_cent": 18.5,
+      "discount_included_pct": 0,
+      "vat_included": true,
+      "effective_from": "2026-09-14",
+      "research_date": "2026-10-28",
+      "source_url": [
+        "https://pinergy.ie/customer-information/lifestyle-smart-tariffs/",
+        "https://pinergy.ie/?p=10334"
+      ],
+      "notes": "The 40 % discount window from 19:00 to midnight is held in the night band. Every other hour is the standard rate."
+    }
+  ]
+}

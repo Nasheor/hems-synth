@@ -1,0 +1,69 @@
+# Synthetic household profiles. Every identifier in this file is made up: site ids, station
+# prefixes, MPRNs and meter serials never belonged to a real household. Add a site here and the
+# generator, exporters, loader and marts pick it up without a code change.
+sites:
+  - site_id: S01
+    inverter_family: sofar
+    pv_kwp: 4.4
+    inverter_ac_kw: 4.0
+    battery_kwh: 5.0
+    battery_power_kw: 2.5
+    ev_charger_kw: 7.4
+    occupants: 3
+    base_load_w: 300
+    tariff_key: sse_smart_standard
+    latitude: 51.90
+    longitude: -8.47
+    seed: 101
+    winter_load_factor: 0.25
+    ev_nights_per_week: 3.5
+    ev_daily_kwh_min: 8.0
+    ev_daily_kwh_max: 30.0
+    mprn: "10000000101"
+    meter_serial: "SYN0000101"
+    lifetime_import_kwh: 3210.55
+    lifetime_export_kwh: 1875.20
+
+  - site_id: S02
+    inverter_family: sigenergy
+    pv_kwp: 6.0
+    inverter_ac_kw: 6.0
+    battery_kwh: 9.0
+    battery_power_kw: 5.0
+    ev_charger_kw: null
+    occupants: 4
+    base_load_w: 350
+    tariff_key: energia_smart_data
+    latitude: 52.27
+    longitude: -9.70
+    seed: 202
+    winter_load_factor: 0.60
+    station_prefix: station_s02
+    inverter_id: inv01
+    frient_prefix: frient_meter_s02
+    mprn: "10000000202"
+    meter_serial: "SYN0000202"
+    lifetime_import_kwh: 980.10
+    lifetime_export_kwh: 455.60
+
+  - site_id: S03
+    inverter_family: sofar
+    pv_kwp: 0.0
+    inverter_ac_kw: 0.0
+    battery_kwh: 0.0
+    battery_power_kw: 0.0
+    ev_charger_kw: 7.4
+    occupants: 2
+    base_load_w: 250
+    tariff_key: ei_night_boost
+    latitude: 53.35
+    longitude: -6.26
+    seed: 303
+    winter_load_factor: 0.30
+    ev_nights_per_week: 4.5
+    ev_daily_kwh_min: 10.0
+    ev_daily_kwh_max: 35.0
+    mprn: "10000000303"
+    meter_serial: "SYN0000303"
+    lifetime_import_kwh: 5120.00
+    lifetime_export_kwh: 0.0
