@@ -7,7 +7,7 @@
   "S01_spikes": "31 / 31",
   "S01_gaps": "3 / 3",
   "S01_cheapest": "ei_sst (\u20ac103.87)",
-  "S01_seconds": "23",
+  "S01_seconds": "24",
   "S02_days": "20",
   "S02_entities": "22",
   "S02_points": "92,815",
@@ -16,8 +16,8 @@
   "S02_spikes": "41 / 41",
   "S02_gaps": "none injected",
   "S02_cheapest": "ei_sst (\u20ac26.46)",
-  "S02_seconds": "11",
+  "S02_seconds": "12",
   "plans_costed": "11",
-  "smoke_seconds": "47",
+  "smoke_seconds": "49",
   "determinism": "S01 yes, S02 yes"
 }

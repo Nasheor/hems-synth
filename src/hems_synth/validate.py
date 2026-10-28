@@ -314,6 +314,4 @@ def validate(data_dir: Path, marts_dir: Path, loaded: dict | None = None, config
 
 def write_json(path: Path, data: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, indent=2, default=str) + "
-", encoding="utf-8", newline="
-")
+    path.write_text(json.dumps(data, indent=2, default=str) + "\n", encoding="utf-8", newline="\n")

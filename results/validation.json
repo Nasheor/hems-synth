@@ -61,8 +61,22 @@
         "resets": 24,
         "resets_kept": 24,
         "lifetime_glitches_injected": 3,
-        "lifetime_days_checked": 17,
-        "lifetime_max_abs_error_kwh": 0.0163
+        "recovery": {
+          "total_energy_import": {
+            "days_checked": 19,
+            "max_abs_error_kwh": 0.0074
+          },
+          "today_energy_import": {
+            "days_checked": 19,
+            "max_abs_error_kwh": 0.0153
+          },
+          "today_energy_export": {
+            "days_checked": 19,
+            "max_abs_error_kwh": 6.7729
+          }
+        },
+        "lifetime_max_abs_error_kwh": 0.0074,
+        "counter_recovery_max_abs_error_kwh": 6.7729
       },
       "gaps": {
         "injected": 3,
@@ -242,5 +256,5 @@
     "S01": "yes",
     "S02": "yes"
   },
-  "smoke_seconds": 46.58
+  "smoke_seconds": 49.33
 }
