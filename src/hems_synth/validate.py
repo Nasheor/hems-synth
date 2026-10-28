@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 from . import TZ
-from .loader import _counter_to_cumulative, _despike, read_entity, read_esb_hdf
+from .loader import _counter_to_cumulative, _cumulative_at, _despike, read_entity, read_esb_hdf
 from .marts import duckdb_sums, load_export
 from .profiles import load_profiles
 from .simulate import STEP_S, read_truth
@@ -79,24 +79,22 @@ def _sofar_counters(folder: Path, artefacts: dict, truth_daily: pd.DataFrame) ->
     out["spikes_removed"] = removed
     out["resets"] = sum(v["resets"] for v in out.values() if isinstance(v, dict))
     out["resets_kept"] = sum(v["resets_kept"] for v in out.values() if isinstance(v, dict))
-    # lifetime counter recovery straight from the raw series (with injected negative glitches), per local day
-    raw = read_entity(folder, "total_energy_import")
-    cum = _counter_to_cumulative(raw)
-    days = _local_days(cum.index)
-    first_point_day = days[0]
-    deltas = cum.groupby(days).last().diff()
-    errs = []
-    for day, delta in deltas.items():
-        if day == first_point_day or day not in truth_daily.index or pd.isna(delta):
-            continue
-        prev_day = day - pd.Timedelta(days=1)
-        if prev_day not in truth_daily.index:
-            continue
-        # the day's energy is the counter at the end of the day minus the counter at the end of the previous day
-        errs.append({"date": str(day.date()), "abs_kwh": abs(float(delta) - float(truth_daily.loc[day, "import_kwh"]))})
+    # counter recovery straight from the raw series, per local day, read at the local midnights the way the
+    # loader does: the lifetime counter carries the injected negative glitches, the day counters the resets
+    recovery = {}
+    for entity, flow in (("total_energy_import", "import"), ("today_energy_import", "import"), ("today_energy_export", "export")):
+        raw = read_entity(folder, entity)
+        cum = _counter_to_cumulative(raw)
+        truth_days = pd.DatetimeIndex(truth_daily.index)
+        bounds = truth_days.tz_localize(TZ).append(pd.DatetimeIndex([truth_days[-1] + pd.Timedelta(days=1)]).tz_localize(TZ)).tz_convert("UTC")
+        at = _cumulative_at(cum, bounds)
+        deltas = at.diff().shift(-1).iloc[:-1].to_numpy()
+        errs = [abs(float(d) - float(truth_daily.loc[day, f"{flow}_kwh"])) for day, d in zip(truth_days, deltas) if not pd.isna(d) and day > truth_days[0]]
+        recovery[entity] = {"days_checked": len(errs), "max_abs_error_kwh": round(max(errs, default=0.0), 4)}
     out["lifetime_glitches_injected"] = len(artefacts.get("lifetime_glitches", []))
-    out["lifetime_days_checked"] = len(errs)
-    out["lifetime_max_abs_error_kwh"] = round(max((e["abs_kwh"] for e in errs), default=0.0), 4)
+    out["recovery"] = recovery
+    out["lifetime_max_abs_error_kwh"] = recovery["total_energy_import"]["max_abs_error_kwh"]
+    out["counter_recovery_max_abs_error_kwh"] = round(max(v["max_abs_error_kwh"] for v in recovery.values()), 4)
     return out
 
 
@@ -316,4 +314,6 @@ def validate(data_dir: Path, marts_dir: Path, loaded: dict | None = None, config
 
 def write_json(path: Path, data: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, indent=2, default=str), encoding="utf-8")
+    path.write_text(json.dumps(data, indent=2, default=str) + "
+", encoding="utf-8", newline="
+")

@@ -141,7 +141,8 @@ def _update_readme(table: str, extra_lines: list[str]) -> None:
     before, _, rest = text.partition(README_START)
     _, _, after = rest.partition(README_END)
     block = "\n".join([README_START, table, "", *extra_lines, README_END])
-    readme.write_text(before + block + after, encoding="utf-8")
+    readme.write_text(before + block + after, encoding="utf-8", newline="
+")
 
 
 def smoke(out: Path | None = None, seed: int = 42) -> int:
