@@ -84,7 +84,9 @@ def _sofar_counters(folder: Path, artefacts: dict, truth_daily: pd.DataFrame) ->
     recovery = {}
     for entity, flow in (("total_energy_import", "import"), ("today_energy_import", "import"), ("today_energy_export", "export")):
         raw = read_entity(folder, entity)
-        cum = _counter_to_cumulative(raw)
+        # the lifetime counter goes in raw, so its negative glitches test _counter_to_cumulative alone, while the
+        # day counters carry the positive single-point spikes that _despike exists for, so they are despiked first
+        cum = _counter_to_cumulative(raw if entity.startswith("total_") else _despike(raw))
         truth_days = pd.DatetimeIndex(truth_daily.index)
         bounds = truth_days.tz_localize(TZ).append(pd.DatetimeIndex([truth_days[-1] + pd.Timedelta(days=1)]).tz_localize(TZ)).tz_convert("UTC")
         at = _cumulative_at(cum, bounds)

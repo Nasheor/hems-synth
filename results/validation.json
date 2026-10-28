@@ -72,11 +72,11 @@
           },
           "today_energy_export": {
             "days_checked": 19,
-            "max_abs_error_kwh": 6.7729
+            "max_abs_error_kwh": 0.0045
           }
         },
         "lifetime_max_abs_error_kwh": 0.0074,
-        "counter_recovery_max_abs_error_kwh": 6.7729
+        "counter_recovery_max_abs_error_kwh": 0.0153
       },
       "gaps": {
         "injected": 3,
@@ -256,5 +256,5 @@
     "S01": "yes",
     "S02": "yes"
   },
-  "smoke_seconds": 49.33
+  "smoke_seconds": 44.62
 }
