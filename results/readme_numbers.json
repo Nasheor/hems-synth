@@ -1,0 +1,23 @@
+{
+  "S01_days": "20",
+  "S01_entities": "24",
+  "S01_points": "1,408,887",
+  "S01_daily_max_pct": "0.29",
+  "S01_half_hours": "46 / 50",
+  "S01_spikes": "31 / 31",
+  "S01_gaps": "3 / 3",
+  "S01_cheapest": "ei_sst (\u20ac103.87)",
+  "S01_seconds": "23",
+  "S02_days": "20",
+  "S02_entities": "22",
+  "S02_points": "92,815",
+  "S02_daily_max_pct": "0.31",
+  "S02_half_hours": "46 / 50",
+  "S02_spikes": "41 / 41",
+  "S02_gaps": "none injected",
+  "S02_cheapest": "ei_sst (\u20ac26.46)",
+  "S02_seconds": "11",
+  "plans_costed": "11",
+  "smoke_seconds": "47",
+  "determinism": "S01 yes, S02 yes"
+}

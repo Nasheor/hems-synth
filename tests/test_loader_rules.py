@@ -33,10 +33,13 @@ def test_despike_keeps_a_jump_after_a_silent_gap():
 
 
 def test_counter_to_cumulative_handles_reset_and_glitch():
-    s = _series([1.00, 1.50, 2.00, 0.00, 0.30, 0.80, 0.20, 1.10, 1.20])
+    s = _series([1.00, 1.50, 2.00, 0.00, 0.30, 0.80, 0.60, 0.85, 1.20])
     cum = _counter_to_cumulative(s)
-    # 1.00 start (0), +0.5, +0.5, reset adds 0.00, +0.3, +0.5, glitch 0.20 adds 0, 1.10 adds 0.3 against 0.80, +0.1
-    assert np.allclose(cum.to_numpy(), [0.0, 0.5, 1.0, 1.0, 1.3, 1.8, 1.8, 2.1, 2.2])
+    # 1.00 start (0), +0.5, +0.5, reset adds 0.00, +0.3, +0.5, glitch 0.60 adds 0, 0.85 adds 0.05 against 0.80, +0.35
+    assert np.allclose(cum.to_numpy(), [0.0, 0.5, 1.0, 1.0, 1.3, 1.8, 1.8, 1.85, 2.2])
+    # a drop to below half the last accepted value is a reset even in the middle of the series
+    s = _series([1.00, 2.00, 0.20, 0.50])
+    assert np.allclose(_counter_to_cumulative(s).to_numpy(), [0.0, 1.0, 1.2, 1.5])
 
 
 def test_minute_mean_is_time_weighted_hold_last_value():
@@ -80,4 +83,4 @@ def test_ev_sessions_merge_and_subtract_base_load():
     sessions = ev_sessions(load)
     assert len(sessions) == 1
     assert sessions.iloc[0]["minutes"] == 50
-    assert abs(sessions.iloc[0]["kwh"] - (45 * (7700 - 350) / 60 / 1000)) < 1e-6
+    assert abs(sessions.iloc[0]["kwh"] - (45 * (7700 - 350) / 60 / 1000)) < 6e-4

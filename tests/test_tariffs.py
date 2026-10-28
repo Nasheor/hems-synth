@@ -49,10 +49,10 @@ def test_bill_arithmetic_on_a_flat_day():
 
 def test_brute_force_matches_vector_for_every_plan():
     rng = np.random.default_rng(1)
-    idx = pd.date_range("2026-10-24", "2026-10-27", freq="5s", tz="Europe/Dublin", inclusive="left")
+    idx = pd.date_range("2026-10-23T23:00:00Z", "2026-10-27T00:00:00Z", freq="5s", inclusive="left").tz_convert("Europe/Dublin")
     power = pd.Series(rng.uniform(0, 3000, len(idx)), index=idx)
     kwh = power * 5 / 3600 / 1000
-    hh = kwh.groupby(idx.floor("30min")).sum()
+    hh = kwh.groupby(idx.tz_convert("UTC").floor("30min").tz_convert("Europe/Dublin")).sum()
     for p in tariffs.PLANS.values():
         vec = tariffs.bill(hh, hh * 0, p, 3)["unit_eur"]
         brute = tariffs.brute_force_unit_eur(power, p, 5)

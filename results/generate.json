@@ -1,0 +1,76 @@
+{
+  "seed": 42,
+  "windows": [
+    [
+      "2026-03-27",
+      5
+    ],
+    [
+      "2026-06-01",
+      10
+    ],
+    [
+      "2026-10-23",
+      5
+    ]
+  ],
+  "artefacts": true,
+  "sites": {
+    "S01": {
+      "family": "sofar",
+      "days": 20,
+      "steps": 345600,
+      "entities": 24,
+      "points": 1408887,
+      "esb_rows": {
+        "kW": 1920,
+        "kWh": 1920
+      },
+      "artefacts": {
+        "counter_spikes": 31,
+        "lifetime_glitches": 3,
+        "silent_gaps": 3,
+        "sigen_pv_dips": 0,
+        "sigen_pv_spikes": 0
+      },
+      "simulate_s": 2.61,
+      "export_s": 15.38
+    },
+    "S02": {
+      "family": "sigenergy",
+      "days": 20,
+      "steps": 345600,
+      "entities": 22,
+      "points": 92815,
+      "esb_rows": {
+        "kW": 1920,
+        "kWh": 1920
+      },
+      "artefacts": {
+        "counter_spikes": 0,
+        "lifetime_glitches": 0,
+        "silent_gaps": 0,
+        "sigen_pv_dips": 27,
+        "sigen_pv_spikes": 14
+      },
+      "simulate_s": 1.57,
+      "export_s": 5.12
+    }
+  },
+  "timing_s": {
+    "generate": 24.69,
+    "marts_and_load": 9.3,
+    "validate": 11.58,
+    "determinism": 1.02,
+    "total": 46.58
+  },
+  "marts_rows": {
+    "sites": 2,
+    "energy_30min": 3840,
+    "daily": 80,
+    "tariff_cost": 66,
+    "tariffs": 11,
+    "esb_30min": 1912,
+    "truth_vs_export": 280
+  }
+}

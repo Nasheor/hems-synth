@@ -53,14 +53,19 @@ def test_esb_file_repeats_the_dst_end_hour_and_local_read_drops_it(dst_site):
     imp = raw["Read Type"] == "Active Import Interval (kWh)"
     assert int((imp & ends.str.endswith("25-10-2026 01:30")).sum()) == 2
     assert int((imp & ends.str.endswith("25-10-2026 01:00")).sum()) == 2
+    assert int((imp & ends.str.startswith("29-03-2026 01:00")).sum()) == 0
     assert int((imp & ends.str.startswith("29-03-2026 01:30")).sum()) == 0
-    assert int((imp & ends.str.startswith("29-03-2026 02:00")).sum()) == 0
+    assert int((imp & ends.str.startswith("29-03-2026 02:00")).sum()) == 1
     local = read_esb_hdf(path, clock="local")
     day = local[local.index.strftime("%Y-%m-%d") == "2026-10-25"]
     assert len(day) == 46
-    assert not (day.index.hour == 1).any()
+    assert day.index.is_unique
+    starts_utc = day.index.tz_convert("UTC")
+    dropped = (starts_utc >= pd.Timestamp("2026-10-24T23:30:00Z")) & (starts_utc < pd.Timestamp("2026-10-25T01:30:00Z"))
+    assert not dropped.any()
     utc = read_esb_hdf(path, clock="utc")
-    assert len(utc) == len(local) + 4
+    # read as UTC, the repeated wall-clock labels collapse to one row each, so two of the four days' 192 rows are lost
+    assert len(utc) == 192 - 2 and len(local) == 192 - 4
     assert local.attrs["unit"] == "kWh"
 
 

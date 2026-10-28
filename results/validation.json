@@ -1,0 +1,246 @@
+{
+  "sites": {
+    "S01": {
+      "family": "sofar",
+      "days": 20,
+      "dst_days": [
+        "2026-03-29",
+        "2026-10-25"
+      ],
+      "gap_days": [
+        "2026-03-31",
+        "2026-06-03",
+        "2026-10-25"
+      ],
+      "daily_pct_floor_kwh": 2.0,
+      "daily_max_pct_ordinary_days": 0.2891,
+      "daily_max_pct_ordinary_days_without_gaps": 0.0546,
+      "daily_max_pct_ordinary_days_any_size": 21.6087,
+      "daily_max_abs_kwh_ordinary_days": 0.0252,
+      "daily_max_pct_by_flow": {
+        "import": 0.073,
+        "export": 0.0491,
+        "pv": 0.2891,
+        "load": 0.0933
+      },
+      "daily_max_abs_kwh_by_flow": {
+        "import": 0.0163,
+        "export": 0.0055,
+        "pv": 0.022,
+        "load": 0.0252
+      },
+      "daily_errors_within_0_5_pct": "yes",
+      "half_hour_mae_kwh": {
+        "import": 0.00194,
+        "export": 0.00125,
+        "pv": 0.00026,
+        "load": 0.00025
+      },
+      "half_hours_2026_03_29": 46,
+      "half_hours_2026_10_25": 50,
+      "energy_30min_rows": {
+        "export": 960,
+        "truth": 960
+      },
+      "energy_30min_expected_rows_per_source": 960,
+      "energy_30min_row_count_ok": "yes",
+      "read_entity_utc_unique": "yes",
+      "counters": {
+        "today_energy_import": {
+          "points": 30670,
+          "resets": 15,
+          "resets_kept": 15
+        },
+        "today_energy_export": {
+          "points": 7704,
+          "resets": 9,
+          "resets_kept": 9
+        },
+        "spikes_injected": 31,
+        "spikes_removed": 31,
+        "resets": 24,
+        "resets_kept": 24,
+        "lifetime_glitches_injected": 3,
+        "lifetime_days_checked": 17,
+        "lifetime_max_abs_error_kwh": 0.0163
+      },
+      "gaps": {
+        "injected": 3,
+        "found": 3,
+        "nan_runs_in_truth_days": 3,
+        "held_minutes_inside_gaps": 0
+      },
+      "esb": {
+        "kwh_rows_joined": 956,
+        "kwh_max_abs_diff_per_interval": 0.0005,
+        "kw_file_max_abs_diff_kwh": 0.00025,
+        "dst_end_rows_with_end_time_in_01_hour_both_registers": 8,
+        "dst_end_rows_per_register": 4,
+        "rows_25_oct_after_local_read": 46,
+        "ambiguous_hour_dropped": "yes"
+      },
+      "tariffs": {
+        "plans": 11,
+        "rate_vector_lengths_all_48": "yes",
+        "brute_force_checks": 33,
+        "brute_force_max_abs_diff_eur": 4.9e-05,
+        "tariff_cost_rows_per_month": {
+          "2026-03": 11,
+          "2026-06": 11,
+          "2026-10": 11
+        },
+        "eleven_rows_every_month": "yes"
+      }
+    },
+    "S02": {
+      "family": "sigenergy",
+      "days": 20,
+      "dst_days": [
+        "2026-03-29",
+        "2026-10-25"
+      ],
+      "gap_days": [],
+      "daily_pct_floor_kwh": 2.0,
+      "daily_max_pct_ordinary_days": 0.3137,
+      "daily_max_pct_ordinary_days_without_gaps": 0.3137,
+      "daily_max_pct_ordinary_days_any_size": 0.3765,
+      "daily_max_abs_kwh_ordinary_days": 0.0423,
+      "daily_max_pct_by_flow": {
+        "import": 0.1473,
+        "export": 0.0518,
+        "pv": 0.1034,
+        "load": 0.3137
+      },
+      "daily_max_abs_kwh_by_flow": {
+        "import": 0.0081,
+        "export": 0.0046,
+        "pv": 0.005,
+        "load": 0.0423
+      },
+      "daily_errors_within_0_5_pct": "yes",
+      "half_hour_mae_kwh": {
+        "import": 0.00121,
+        "export": 0.00424,
+        "pv": 0.01373,
+        "load": 0.01462
+      },
+      "half_hours_2026_03_29": 46,
+      "half_hours_2026_10_25": 50,
+      "energy_30min_rows": {
+        "export": 960,
+        "truth": 960
+      },
+      "energy_30min_expected_rows_per_source": 960,
+      "energy_30min_row_count_ok": "yes",
+      "read_entity_utc_unique": null,
+      "sigen": {
+        "dips_injected": 27,
+        "spikes_injected": 14,
+        "artefacts_removed": 41,
+        "battery_counters_unchanged": "yes",
+        "prefixes_from_files": "yes",
+        "prefixes": {
+          "station": "station_s02_",
+          "inverter": "station_s02_inverter_inv01_",
+          "frient": "frient_meter_s02_"
+        }
+      },
+      "gaps": {
+        "injected": 0,
+        "found": 0,
+        "nan_runs_in_truth_days": 0,
+        "held_minutes_inside_gaps": 0
+      },
+      "esb": {
+        "kwh_rows_joined": 956,
+        "kwh_max_abs_diff_per_interval": 0.0005,
+        "kw_file_max_abs_diff_kwh": 0.00025,
+        "dst_end_rows_with_end_time_in_01_hour_both_registers": 8,
+        "dst_end_rows_per_register": 4,
+        "rows_25_oct_after_local_read": 46,
+        "ambiguous_hour_dropped": "yes"
+      },
+      "tariffs": {
+        "plans": 11,
+        "rate_vector_lengths_all_48": "yes",
+        "brute_force_checks": 33,
+        "brute_force_max_abs_diff_eur": 4.9e-05,
+        "tariff_cost_rows_per_month": {
+          "2026-03": 11,
+          "2026-06": 11,
+          "2026-10": 11
+        },
+        "eleven_rows_every_month": "yes"
+      }
+    }
+  },
+  "marts": {
+    "parquet_present": "yes",
+    "duckdb_present": "yes",
+    "duckdb_sums_equal_parquet": "yes",
+    "parquet_sums": {
+      "import_kwh": 796.5878,
+      "export_kwh": 347.591,
+      "pv_kwh": 1237.785,
+      "load_kwh": 1663.5465
+    },
+    "duckdb_sums": {
+      "import_kwh": 796.5878,
+      "export_kwh": 347.591,
+      "pv_kwh": 1237.785,
+      "load_kwh": 1663.5465
+    }
+  },
+  "tariffs": {
+    "plans_costed": 11,
+    "cheapest_per_site_month": {
+      "S01|2026-03": {
+        "plan_key": "ei_night_boost",
+        "net_eur": 23.72,
+        "days": 5
+      },
+      "S01|2026-06": {
+        "plan_key": "ei_sst",
+        "net_eur": 22.0,
+        "days": 10
+      },
+      "S01|2026-10": {
+        "plan_key": "ei_sst",
+        "net_eur": 23.13,
+        "days": 5
+      },
+      "S02|2026-03": {
+        "plan_key": "ei_sst",
+        "net_eur": 8.32,
+        "days": 5
+      },
+      "S02|2026-06": {
+        "plan_key": "ei_night_boost",
+        "net_eur": -9.88,
+        "days": 10
+      },
+      "S02|2026-10": {
+        "plan_key": "ei_sst",
+        "net_eur": 19.19,
+        "days": 5
+      }
+    },
+    "cheapest_per_site": {
+      "S01": {
+        "plan_key": "ei_sst",
+        "net_eur_per_30_days": 103.87,
+        "days": 20
+      },
+      "S02": {
+        "plan_key": "ei_sst",
+        "net_eur_per_30_days": 26.46,
+        "days": 20
+      }
+    }
+  },
+  "determinism_truth_parquet_identical": {
+    "S01": "yes",
+    "S02": "yes"
+  },
+  "smoke_seconds": 46.58
+}

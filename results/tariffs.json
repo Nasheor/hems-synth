@@ -1,0 +1,47 @@
+{
+  "plans_costed": 11,
+  "cheapest_per_site_month": {
+    "S01|2026-03": {
+      "plan_key": "ei_night_boost",
+      "net_eur": 23.72,
+      "days": 5
+    },
+    "S01|2026-06": {
+      "plan_key": "ei_sst",
+      "net_eur": 22.0,
+      "days": 10
+    },
+    "S01|2026-10": {
+      "plan_key": "ei_sst",
+      "net_eur": 23.13,
+      "days": 5
+    },
+    "S02|2026-03": {
+      "plan_key": "ei_sst",
+      "net_eur": 8.32,
+      "days": 5
+    },
+    "S02|2026-06": {
+      "plan_key": "ei_night_boost",
+      "net_eur": -9.88,
+      "days": 10
+    },
+    "S02|2026-10": {
+      "plan_key": "ei_sst",
+      "net_eur": 19.19,
+      "days": 5
+    }
+  },
+  "cheapest_per_site": {
+    "S01": {
+      "plan_key": "ei_sst",
+      "net_eur_per_30_days": 103.87,
+      "days": 20
+    },
+    "S02": {
+      "plan_key": "ei_sst",
+      "net_eur_per_30_days": 26.46,
+      "days": 20
+    }
+  }
+}

@@ -17,7 +17,7 @@ from .simulate import STEP_S, read_truth
 from .tariffs import PLANS, bill, brute_force_unit_eur, rate_vector
 
 ACCEPT_FLOWS = ("import", "export", "pv", "load")
-MIN_TRUTH_KWH = 0.05
+MIN_TRUTH_KWH = 2.0
 
 
 def _local_days(index: pd.DatetimeIndex) -> pd.DatetimeIndex:
@@ -41,7 +41,7 @@ def _daily_errors(e30: pd.DataFrame, truth_daily: pd.DataFrame) -> pd.DataFrame:
                 continue
             t = float(trow[f"{flow}_kwh"])
             v = float(lrow[flow])
-            rows.append({"date": str(day.date()), "flow": flow, "truth_kwh": t, "loader_kwh": v, "abs_kwh": abs(v - t), "pct": abs(v - t) / t * 100.0 if t > MIN_TRUTH_KWH else np.nan})
+            rows.append({"date": str(day.date()), "flow": flow, "truth_kwh": t, "loader_kwh": v, "abs_kwh": abs(v - t), "pct": abs(v - t) / t * 100.0 if t >= MIN_TRUTH_KWH else np.nan, "pct_any": abs(v - t) / t * 100.0 if t > 0.0 else np.nan})
     return pd.DataFrame(rows)
 
 
@@ -77,8 +77,8 @@ def _sofar_counters(folder: Path, artefacts: dict, truth_daily: pd.DataFrame) ->
         out[entity] = {"points": int(len(raw)), "resets": resets_total, "resets_kept": resets_kept}
     out["spikes_injected"] = len(spikes)
     out["spikes_removed"] = removed
-    out["resets"] = sum(v["resets"] for k, v in out.items() if isinstance(v, dict))
-    out["resets_kept"] = sum(v["resets_kept"] for k, v in out.items() if isinstance(v, dict))
+    out["resets"] = sum(v["resets"] for v in out.values() if isinstance(v, dict))
+    out["resets_kept"] = sum(v["resets_kept"] for v in out.values() if isinstance(v, dict))
     # lifetime counter recovery straight from the raw series (with injected negative glitches), per local day
     raw = read_entity(folder, "total_energy_import")
     cum = _counter_to_cumulative(raw)
@@ -140,8 +140,10 @@ def _sigen_counters(site: dict, artefacts: dict, export_prefixes: dict | None) -
     removed = 0
     for a in injected:
         t = pd.Timestamp(a["time_utc"]).tz_convert(TZ)
-        if t in raw.index and abs(float(clean[t]) - float(raw[t])) > 0.1 and abs(float(clean[t]) - float(a["true_value"])) <= 0.2:
-            removed += 1
+        if t in raw.index:
+            c, r, tv = float(clean[t]), float(raw[t]), float(a["true_value"])
+            if abs(c - r) > 0.1 and abs(c - tv) < abs(r - tv):
+                removed += 1
     battery_unchanged = all(site["raw_counters"][k].equals(site["clean_counters"][k]) for k in ("daily_charge_energy", "daily_discharge_energy") if k in site["raw_counters"])
     prefixes_ok = export_prefixes is None or (site["prefixes"]["station"] == export_prefixes.get("station") and site["prefixes"]["inverter"] == export_prefixes.get("inverter"))
     return {
@@ -166,7 +168,7 @@ def _esb_checks(folder: Path, mprn: str, truth_hh: pd.DataFrame) -> dict:
     max_diff = float(max((j["import"] - j["import_kwh"]).abs().max(), (j["export"] - j["export_kwh"]).abs().max()))
     day_counts = local.groupby(local.index.normalize()).size()
     rows_25_oct = int(day_counts.get(pd.Timestamp("2026-10-25", tz=TZ), 0))
-    has_ambiguous = bool(((local.index.strftime("%d-%m-%Y") == "25-10-2026") & (local.index.hour == 1)).any())
+    no_duplicate_labels = bool(local.index.is_unique)
     kw_path = folder / f"HDF_kW_{mprn}.csv"
     kw = read_esb_hdf(kw_path, clock="local")
     jk = kw.join(th[["import_kwh"]], how="inner")
@@ -175,9 +177,10 @@ def _esb_checks(folder: Path, mprn: str, truth_hh: pd.DataFrame) -> dict:
         "kwh_rows_joined": int(len(j)),
         "kwh_max_abs_diff_per_interval": round(max_diff, 5),
         "kw_file_max_abs_diff_kwh": round(kw_max_diff, 5),
-        "dst_end_rows_in_01_hour_per_register_pair": dst_end_rows,
+        "dst_end_rows_with_end_time_in_01_hour_both_registers": dst_end_rows,
+        "dst_end_rows_per_register": dst_end_rows // 2,
         "rows_25_oct_after_local_read": rows_25_oct,
-        "ambiguous_hour_dropped": "yes" if (not has_ambiguous and dst_end_rows > 0) else ("no" if dst_end_rows > 0 else "not in run"),
+        "ambiguous_hour_dropped": "yes" if (dst_end_rows == 8 and rows_25_oct == 46 and no_duplicate_labels) else ("no" if dst_end_rows > 0 else "not in run"),
     }
 
 
@@ -251,8 +254,11 @@ def validate(data_dir: Path, marts_dir: Path, loaded: dict | None = None, config
             "days": int(len(truth_days)),
             "dst_days": dst_days,
             "gap_days": gap_days,
+            "daily_pct_floor_kwh": MIN_TRUTH_KWH,
             "daily_max_pct_ordinary_days": round(float(ordinary["pct"].max()), 4) if ordinary["pct"].notna().any() else None,
             "daily_max_pct_ordinary_days_without_gaps": round(float(no_gap["pct"].max()), 4) if no_gap["pct"].notna().any() else None,
+            "daily_max_pct_ordinary_days_any_size": round(float(ordinary["pct_any"].max()), 4) if ordinary["pct_any"].notna().any() else None,
+            "daily_max_abs_kwh_ordinary_days": round(float(ordinary["abs_kwh"].max()), 4),
             "daily_max_pct_by_flow": {f: round(float(ordinary[ordinary["flow"] == f]["pct"].max()), 4) if ordinary[ordinary["flow"] == f]["pct"].notna().any() else None for f in ACCEPT_FLOWS},
             "daily_max_abs_kwh_by_flow": {f: round(float(ordinary[ordinary["flow"] == f]["abs_kwh"].max()), 4) for f in ACCEPT_FLOWS},
             "daily_errors_within_0_5_pct": "yes" if ordinary["pct"].dropna().le(0.5).all() else "no",

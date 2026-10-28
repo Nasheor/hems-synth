@@ -116,14 +116,18 @@ def day_segments(idx: pd.DatetimeIndex, tz: str) -> list[tuple[int, int]]:
 
 
 def daily_counter(kwh_per_step: np.ndarray, idx: pd.DatetimeIndex, tz: str, decimals: int = 2) -> np.ndarray:
-    """A counter that accumulates within each local day and resets to zero at local midnight."""
-    cs = np.cumsum(kwh_per_step)
+    """A counter that accumulates within each local day and resets to zero at local midnight.
+
+    A reading stamped ``t`` reports the energy accumulated up to ``t``, not including the step that
+    starts at ``t``, the way a device reports what it has already measured. The reading at midnight is
+    therefore exactly zero and the last step of a day is carried only by the lifetime counter."""
+    cs = np.cumsum(kwh_per_step) - kwh_per_step
     out = np.empty_like(cs)
     for s, e in day_segments(idx, tz):
-        base = cs[s] - kwh_per_step[s]
-        out[s:e] = cs[s:e] - base
+        out[s:e] = cs[s:e] - cs[s]
     return np.round(out, decimals)
 
 
 def lifetime_counter(kwh_per_step: np.ndarray, start_kwh: float, decimals: int = 2) -> np.ndarray:
-    return np.round(start_kwh + np.cumsum(kwh_per_step), decimals)
+    """A never-resetting counter whose reading at ``t`` is the energy accumulated up to ``t``."""
+    return np.round(start_kwh + np.cumsum(kwh_per_step) - kwh_per_step, decimals)

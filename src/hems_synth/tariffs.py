@@ -95,14 +95,15 @@ def bill(imp30: pd.Series, exp30: pd.Series, plan: dict, days: int) -> dict:
     standing_eur = float(plan["standing_eur_year"]) * days / 365.0
     pso_eur = PSO_EUR_MONTH * 12.0 * days / 365.0
     export_credit_eur = float(exp.sum()) * export_rate_cent(plan) / 100.0
+    unit_eur, standing_eur, pso_eur, export_credit_eur = (round(x, 4) for x in (unit_eur, standing_eur, pso_eur, export_credit_eur))
     out.update(
         {
             "kwh_import": float(kwh.sum()),
             "kwh_export": float(exp.sum()),
-            "unit_eur": round(unit_eur, 4),
-            "standing_eur": round(standing_eur, 4),
-            "pso_eur": round(pso_eur, 4),
-            "export_credit_eur": round(export_credit_eur, 4),
+            "unit_eur": unit_eur,
+            "standing_eur": standing_eur,
+            "pso_eur": pso_eur,
+            "export_credit_eur": export_credit_eur,
             "net_eur": round(unit_eur + standing_eur + pso_eur - export_credit_eur, 4),
             "days": int(days),
         }

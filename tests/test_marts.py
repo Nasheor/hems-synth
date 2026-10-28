@@ -19,7 +19,7 @@ def small_run(tmp_path_factory):
 
 
 def test_parquet_and_duckdb_tables_exist(small_run):
-    out, info = small_run
+    out, _ = small_run
     for t in TABLES:
         assert (out / "marts" / f"{t}.parquet").exists()
     con = duckdb.connect(str(out / "marts" / "hems.duckdb"), read_only=True)
@@ -55,7 +55,7 @@ def test_tariff_cost_has_eleven_rows_per_site_and_month(small_run):
     tc = pd.read_parquet(out / "marts" / "tariff_cost.parquet")
     per = tc.groupby(["site_id", "month"]).size()
     assert (per == len(PLANS)).all() and len(per) == 2
-    assert (tc["net_eur"] == tc["unit_eur"] + tc["standing_eur"] + tc["pso_eur"] - tc["export_credit_eur"]).all() or (tc["net_eur"] - (tc["unit_eur"] + tc["standing_eur"] + tc["pso_eur"] - tc["export_credit_eur"])).abs().max() < 1e-6
+    assert (tc["net_eur"] - (tc["unit_eur"] + tc["standing_eur"] + tc["pso_eur"] - tc["export_credit_eur"])).abs().max() < 1e-6
 
 
 def test_truth_vs_export_and_sites_tables(small_run):

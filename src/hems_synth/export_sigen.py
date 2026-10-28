@@ -25,7 +25,15 @@ import numpy as np
 import pandas as pd
 
 from . import TZ
-from .export_common import ArtefactLog, daily_counter, day_segments, lifetime_counter, write_entity_csv, write_on_change, write_on_value_change
+from .export_common import (
+    ArtefactLog,
+    daily_counter,
+    day_segments,
+    lifetime_counter,
+    write_entity_csv,
+    write_on_change,
+    write_on_value_change,
+)
 from .simulate import STEP_S, SimResult
 
 POLL_STEPS = 300 // STEP_S
@@ -63,7 +71,6 @@ def export_sigenergy(sim: SimResult, out_folder: Path, seed: int, artefacts: boo
     log = ArtefactLog()
     t = sim.truth
     idx = t.index
-    n = len(idx)
     f = STEP_S / 3600.0 / 1000.0
 
     pv = t["pv_w"].to_numpy()
@@ -116,12 +123,19 @@ def export_sigenergy(sim: SimResult, out_folder: Path, seed: int, artefacts: boo
         local = pt.tz_convert(TZ)
         local_h = local.hour.to_numpy() + local.minute.to_numpy() / 60.0
         day_segs = day_segments(pt, TZ)
-        # one-reading dips to about one hundredth of the value, about one per day
-        cand = np.nonzero(pv_polls > 1.0)[0]
+        # one-reading dips to about one hundredth of the value on a rising daytime counter, about one per
+        # day, at least three polls apart so that each sits alone in its median window
+        cand = np.nonzero((pv_polls > 1.0) & (pv[polls] > 0.0))[0]
         cand = cand[(cand > 2) & (cand < m - 3)]
         n_dips = min(len(cand), int(rng.poisson(len(day_segs))))
+        chosen: list[int] = []
         if n_dips > 0:
-            for j in np.sort(rng.choice(cand, size=n_dips, replace=False)):
+            for j in rng.permutation(cand):
+                if all(abs(int(j) - c) >= 3 for c in chosen):
+                    chosen.append(int(j))
+                if len(chosen) >= n_dips:
+                    break
+            for j in sorted(chosen):
                 true_v = float(pv_polls[j])
                 dip = round(true_v / 100.0, 2)
                 pv_polls[j] = dip

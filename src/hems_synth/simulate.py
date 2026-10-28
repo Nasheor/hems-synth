@@ -117,7 +117,7 @@ def _appliance_events(idx: pd.DatetimeIndex, local_h: np.ndarray, rng: np.random
     n = len(idx)
     add = np.zeros(n)
     loc = idx.tz_convert(TZ)
-    day_codes, day_starts = np.unique(loc.normalize().to_numpy(), return_index=True)
+    _, day_starts = np.unique(loc.normalize().to_numpy(), return_index=True)
     day_ends = np.r_[day_starts[1:], n]
 
     def pulse(start: int, minutes: float, watts: float, end_cap: int) -> None:
@@ -125,23 +125,22 @@ def _appliance_events(idx: pd.DatetimeIndex, local_h: np.ndarray, rng: np.random
         if stop > start:
             add[start:stop] += watts
 
+    def at_hour(d0: int, hours: np.ndarray, h: float) -> int:
+        return d0 + int(np.searchsorted(hours, h))
+
     for d0, d1 in zip(day_starts, day_ends):
         hours = local_h[d0:d1]
-
-        def at_hour(h: float) -> int:
-            return d0 + int(np.searchsorted(hours, h))
-
         for _ in range(rng.poisson(5)):
             h = rng.choice([7.2, 8.0, 10.5, 13.0, 16.0, 18.0, 20.5, 21.5]) + rng.normal(0, 0.4)
-            pulse(at_hour(h % 24), rng.uniform(2.5, 3.5), 2000.0, d1)
+            pulse(at_hour(d0, hours, h % 24), rng.uniform(2.5, 3.5), 2000.0, d1)
         if rng.random() < 0.5:
-            pulse(at_hour(rng.uniform(17.0, 19.5)), rng.uniform(45, 75), 1400.0, d1)
+            pulse(at_hour(d0, hours, rng.uniform(17.0, 19.5)), rng.uniform(45, 75), 1400.0, d1)
         if rng.random() < 0.6:
-            s = at_hour(rng.uniform(8.0, 20.0))
+            s = at_hour(d0, hours, rng.uniform(8.0, 20.0))
             pulse(s, 15, 2000.0, d1)
             pulse(s + 15 * STEPS_PER_MIN, 75, 300.0, d1)
         if rng.random() < 0.5:
-            s = at_hour(rng.uniform(20.0, 22.0))
+            s = at_hour(d0, hours, rng.uniform(20.0, 22.0))
             pulse(s, 20, 1800.0, d1)
             pulse(s + 20 * STEPS_PER_MIN, 55, 100.0, d1)
     period = 40 * STEPS_PER_MIN

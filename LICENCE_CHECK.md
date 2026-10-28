@@ -20,6 +20,7 @@ One row per dataset, model or third-party file before it is downloaded for use (
 | duckdb 2.0.0 | https://pypi.org/project/duckdb/ | MIT | Not applicable | Yes | 2026-10-28 | |
 | PyYAML 6.0.3 | https://pypi.org/project/PyYAML/ | MIT | Not applicable | Yes | 2026-10-28 | |
 | fastapi 0.162.0 | https://pypi.org/project/fastapi/ | MIT | Not applicable | Yes | 2026-10-28 | Optional `serve` command only. |
+| pytz 2026.5 | https://pypi.org/project/pytz/ | MIT | Not applicable | Yes | 2026-10-28 | Needed by DuckDB to return timestamps with a time zone. |
 | uvicorn 0.54.0 | https://pypi.org/project/uvicorn/ | BSD-3-Clause | Not applicable | Yes | 2026-10-28 | Optional `serve` command only. |
 | pytest 9.2.0, ruff 0.17.3, build 1.6.1, httpx 0.28.1 | https://pypi.org/ | MIT, MIT, MIT, BSD-3-Clause | Not applicable | Yes | 2026-10-28 | Development extras. |
 

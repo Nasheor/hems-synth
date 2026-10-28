@@ -190,9 +190,11 @@ def load_site(folder: Path, cache: Path | None = None) -> dict:
     All indexes are Europe/Dublin.
 
     Energy columns: ``pv`` and ``load`` are integrated minute power, ``import`` and ``export`` come
-    from the day counters (``import_power`` and ``export_power`` are the integrated grid power kept
-    for comparison), ``batt_charge`` and ``batt_discharge`` from the difference between PV power and
-    inverter output power, ``ev`` from the EV session rule."""
+    from the lifetime counters, which never reset and so never drop the last step of a day (the day
+    counters are used when a lifetime counter is missing, and both feed ``totals``), ``import_power``
+    and ``export_power`` are the integrated grid power kept for comparison, ``batt_charge`` and
+    ``batt_discharge`` come from the difference between PV power and inverter output power, and
+    ``ev`` from the EV session rule."""
     folder = Path(folder)
     files = sorted(folder.glob(f"{PREFIX}*.csv.gz"))
     if not files:
@@ -259,11 +261,9 @@ def load_site(folder: Path, cache: Path | None = None) -> dict:
             }
         )
         e = base.resample(freq).mean() * hours / 1000.0
-        for col, name in (("import", "today_energy_import"), ("export", "today_energy_export")):
-            if name in cumulative:
-                e[col] = _interval_from_cumulative(cumulative[name], grid, freq).reindex(e.index)
-            else:
-                e[col] = e[f"{col}_power"]
+        for col in ("import", "export"):
+            source = next((n for n in (f"total_energy_{col}", f"today_energy_{col}") if n in cumulative), None)
+            e[col] = _interval_from_cumulative(cumulative[source], grid, freq).reindex(e.index) if source else e[f"{col}_power"]
         e["soc_pct_end"] = np.nan
         cols = ["pv", "load", "import", "export", "batt_charge", "batt_discharge", "ev", "import_power", "export_power", "soc_pct_end"]
         return e[cols]
