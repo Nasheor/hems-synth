@@ -11,20 +11,23 @@ requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "Avinash Nagarajan" }]
 dependencies = [
-  "numpy",
-  "pandas",
-  "pyarrow",
-  "duckdb",
-  "pyyaml",
-  "fastapi",
-  "uvicorn",
+  "numpy==2.5.4",
+  "pandas==3.1.0",
+  "pyarrow==26.0.0",
+  "duckdb==2.0.0",
+  "pyyaml==6.0.3",
+  "fastapi==0.162.0",
+  "uvicorn==0.54.0",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff", "build", "httpx"]
+dev = ["pytest==9.2.0", "ruff==0.17.3", "build==1.6.1", "httpx==0.28.1"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+hems_synth = ["py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

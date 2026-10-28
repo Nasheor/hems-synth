@@ -32,12 +32,12 @@ sites:
     battery_power_kw: 5.0
     ev_charger_kw: null
     occupants: 4
-    base_load_w: 350
+    base_load_w: 300
     tariff_key: energia_smart_data
     latitude: 52.27
     longitude: -9.70
     seed: 202
-    winter_load_factor: 0.60
+    winter_load_factor: 0.50
     station_prefix: station_s02
     inverter_id: inv01
     frient_prefix: frient_meter_s02
