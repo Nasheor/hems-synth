@@ -11,7 +11,11 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_CONFIG = ROOT / "config" / "sites.yaml"
+_REPO_CONFIG = ROOT / "config" / "sites.yaml"
+_PACKAGED_CONFIG = Path(__file__).resolve().parent / "_data" / "sites.yaml"
+# The repo copy is the source of truth in a checkout. An installed wheel has no repo, so it reads the
+# packaged copy, which tests/test_packaging.py keeps byte-identical to the repo file.
+DEFAULT_CONFIG = _REPO_CONFIG if _REPO_CONFIG.exists() else _PACKAGED_CONFIG
 FAMILIES = ("sofar", "sigenergy")
 
 

@@ -17,7 +17,11 @@ import pandas as pd
 from . import TZ
 
 ROOT = Path(__file__).resolve().parents[2]
-PLANS_PATH = ROOT / "data" / "tariffs" / "plans.json"
+_REPO_PLANS = ROOT / "data" / "tariffs" / "plans.json"
+_PACKAGED_PLANS = Path(__file__).resolve().parent / "_data" / "plans.json"
+# The repo copy is the source of truth in a checkout. An installed wheel has no repo, so it reads the
+# packaged copy, which tests/test_packaging.py keeps byte-identical to the repo file.
+PLANS_PATH = _REPO_PLANS if _REPO_PLANS.exists() else _PACKAGED_PLANS
 BANDS = ("ev", "peak", "night", "day")
 
 

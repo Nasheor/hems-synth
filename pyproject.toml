@@ -28,7 +28,7 @@ dev = ["pytest==9.2.0", "ruff==0.17.3", "build==1.6.1", "httpx==0.28.1"]
 where = ["src"]
 
 [tool.setuptools.package-data]
-hems_synth = ["py.typed"]
+hems_synth = ["py.typed", "_data/sites.yaml", "_data/plans.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
