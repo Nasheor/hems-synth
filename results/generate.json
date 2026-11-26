@@ -33,8 +33,8 @@
         "sigen_pv_dips": 0,
         "sigen_pv_spikes": 0
       },
-      "simulate_s": 2.45,
-      "export_s": 15.32
+      "simulate_s": 2.3,
+      "export_s": 15.13
     },
     "S02": {
       "family": "sigenergy",
@@ -53,16 +53,16 @@
         "sigen_pv_dips": 27,
         "sigen_pv_spikes": 14
       },
-      "simulate_s": 1.57,
-      "export_s": 5.3
+      "simulate_s": 1.65,
+      "export_s": 5.17
     }
   },
   "timing_s": {
-    "generate": 24.65,
-    "marts_and_load": 8.71,
-    "validate": 10.34,
-    "determinism": 0.92,
-    "total": 44.62
+    "generate": 24.26,
+    "marts_and_load": 9.28,
+    "validate": 10.63,
+    "determinism": 1.0,
+    "total": 45.18
   },
   "marts_rows": {
     "sites": 2,

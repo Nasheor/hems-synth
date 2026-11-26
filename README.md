@@ -61,10 +61,18 @@ Truth is written to `data/<run>/truth/<site>/` as five-second, half-hourly and d
 
 `data/tariffs/plans.json` holds eleven current smart-meter plans from Electric Ireland, Energia, SSE Airtricity, Bord Gáis Energy and Pinergy, researched on 28 October 2026 from the suppliers' own price pages (URLs and effective dates in the file), with the 9 % VAT rate and the 2026/27 PSO levy and their sources. Bands are local clock hours, a window whose start is after its end wraps midnight, priority EV, then peak, then night, then day. `rate_vector` gives the 48 half-hourly rates of a day and `bill` the kWh per band, unit cost, standing charge, PSO levy, export credit and net cost. A weekday-only peak is modelled every day, which the plan note states.
 
+## Requirements
+
+- Python 3.11 or newer and git.
+- The commands below are written for Windows (`.venv\Scripts\`). On Linux or macOS use `.venv/bin/` instead.
+- Every dependency is pinned in `pyproject.toml`, and `requirements.lock` records the full resolved set.
+- No API key, no account and no download. Everything is generated from seeds.
+- The smoke run takes under a minute. A full year for three sites writes several gigabytes under `data/`, which is gitignored.
+
 ## How to run
 
 ```
-C:/Users/nagar/anaconda3/python.exe -m venv .venv
+python -m venv .venv
 .venv\Scripts\pip install -e .[dev]
 .venv\Scripts\python -m pytest -q
 .venv\Scripts\python -m hems_synth smoke
@@ -93,6 +101,31 @@ The five-second truth is simulated first, then each exporter applies the device'
 * The HDF column names are verified against public descriptions and a public reader, not against a real download.
 * Tariff rates move often. The file records the research date and the page each number came from, and two Electric Ireland plans are only published with a discount included.
 
+## Repository layout
+
+| Path | What it holds |
+|---|---|
+| `src/hems_synth/profiles.py`, `simulate.py` | The site profiles and the five-second truth for load, PV, battery, EV and grid flows |
+| `src/hems_synth/export_ha.py`, `export_sigen.py`, `export_esb.py`, `export_common.py` | The three device-style exporters and their shared write-on-change compression |
+| `src/hems_synth/loader.py` | The reference loader and its cleaning rules |
+| `src/hems_synth/marts.py`, `tariffs.py` | The Parquet and DuckDB marts and the half-hourly bill arithmetic for the eleven plans |
+| `src/hems_synth/validate.py` | The comparison of loader output with the generator truth, which writes `results/` |
+| `src/hems_synth/serve.py` | The read-only FastAPI over the DuckDB marts |
+| `src/hems_synth/__main__.py` | The command line: `generate`, `marts`, `validate`, `serve`, `smoke` |
+| `config/sites.yaml` | The made-up sites |
+| `data/tariffs/plans.json` | The eleven plans with the date each price page was read |
+| `results/` | The JSON files behind every number in this README |
+| `tests/` | The test suite |
+| `LICENCE_CHECK.md` | Source, licence and permitted use of every outside input |
+
+## Tests
+
+`python -m pytest -q` runs without a key or a download. The suite covers the smoke run, byte-identical output for the same seed, both 2026 DST days, each loader cleaning rule against planted artefacts, the mart schema and the Parquet and DuckDB sums, the tariff arithmetic against a brute-force bill, the wheel imported outside the checkout, the absence of personal data and key-like strings, and every number in this README against `results/*.json`.
+
 ## Licence
 
 MIT, Avinash Nagarajan.
+
+## Author
+
+Avinash Nagarajan ([github.com/Nasheor](https://github.com/Nasheor)). Questions and bug reports are welcome through the issue tracker of this repository.
